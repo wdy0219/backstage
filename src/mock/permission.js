@@ -1,9 +1,11 @@
+import Mock from 'mockjs'
+
 export default {
     getMenu: config => {
         const { username, password } = JSON.parse(config.body)
         console.log(JSON.parse(config.body))
         // 先判断用户是否存在
-        if (usrename === 'admin' || username === 'wp') {
+        if (username === 'admin' || username === 'user') {
             // 判断账号密码是否对应
             if (username === 'admin' && password === '123456') {
                 return {
@@ -13,7 +15,8 @@ export default {
                             {
                                 path: '/',
                                 name: 'home',
-                                label: 's-home',
+                                label: '首页',
+                                icon: 's-home',
                                 url: 'Home/Home'
                             },
                             {
@@ -21,7 +24,7 @@ export default {
                                 name: 'video',
                                 label: '视频管理页',
                                 icon: 'video-play',
-                                url: 'VideoManage/UserManage'
+                                url: 'VideoManage/VideoManage'
                             },
                             {
                                 path: '/user',
@@ -51,18 +54,38 @@ export default {
                                 ]
                             }
                         ],
+                        token: Mock.Random.guid(),
                         message: '获取成功'
                     }
                 }
-            }else if (username === 'wp' && password ==='123456') {
+            }else if (username === 'user' && password ==='123456') {
                 return {
                     code: 2000,
                     data: {
                         menu: [
                             {
-                                
+                                path: '/',
+                                name: 'home',
+                                label: 's-home',
+                                url: 'Home/Home'
+                            },
+                            {
+                                path: '/video',
+                                name: 'video',
+                                label: '视频管理页',
+                                icon: 'video-play',
+                                url: 'VideoManage/VideoManage'
                             }
-                        ]
+                        ],
+                        token: Mock.Random.guid(),
+                        message: '获取成功'
+                    }
+                }
+            }else {
+                return {
+                    code: -999,
+                    data: {
+                        message: '密码错误',
                     }
                 }
             }

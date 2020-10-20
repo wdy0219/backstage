@@ -101,15 +101,17 @@ export default {
 
   computed: {
     noChildren() {
-      return this.asideMenu.filter(item => !item.children);
+      return this.menu.filter(item => !item.children);
     },
     hasChildren() {
-      return this.asideMenu.filter(item => item.children);
+      return this.menu.filter(item => item.children);
     },
     isCollapse() {
       return this.$store.state.tab.isCollapse   // 是否折叠侧边栏，默认false，判断变量和修改方法在vuex中，方便别的组件修改
     },
-    
+    menu() {
+      return this.$store.state.tab.menu
+    }
   }
 };
 </script>

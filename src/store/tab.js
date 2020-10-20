@@ -1,5 +1,5 @@
+import Cookie from 'js-cookie'
 
-// Vuex 公共数据仓库
 export default {
     state: {
         menu: [],
@@ -15,7 +15,41 @@ export default {
         ]
     },
     mutations: {
-        
+        setMenu(state, val) {
+            state.menu = val
+            Cookie.set('menu', JSON.stringify(val))
+        },
+        clearMenu(state) {
+            state.menu = [],
+            Cookie.remove('menu')
+        },
+        addMenu(state, router) {
+            if (!Cookie.get('menu')) {
+                return
+            }
+            let menu = JSON.parse(Cookie.get('menu'))
+            state.menu = menu
+            let currentMenu = [
+                {
+                    path: '/',
+                    component: () => import(`@/views/Main`),
+                    children: []
+                }
+            ]
+            menu.forEach(item => {
+                if (item.children) {
+                    item.children = item.children.map(item => {
+                        item.component = () => import(`@/views/${item.url}`)
+                        return item
+                    })
+                    currentMenu[0].children.push(...item.children)
+                }else {
+                    item.component = () => import(`@/views/${item.url}`)
+                    currentMenu[0].children.push(item)
+                }
+            })
+            router.addRoutes(currentMenu)
+        },
         selectMenu(state, val) {    // val使用点击事件触发方法传进来的值，每次点击传递都不一样，面包屑采用赋值，tab采用追加
             if (val.name !== 'home') {
                 state.currentMenu = val     // 实现头部面包屑
